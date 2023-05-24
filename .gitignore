@@ -1,0 +1,6 @@
+# Dependeces
+node_modules
+
+# Everimental
+.env
+.env.test
