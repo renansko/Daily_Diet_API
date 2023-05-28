@@ -1,6 +1,9 @@
 # Dependeces
 node_modules
 
+# Databases
+db/*.db
+
 # Everimental
 .env
 .env.test
