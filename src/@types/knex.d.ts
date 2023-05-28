@@ -10,7 +10,7 @@ declare module 'knex/types/tables' {
       email: string
       created_at: string
       updated_at: string
-      dietIds: string
+      dietIds: Array
     }
     diet: {
       id: string

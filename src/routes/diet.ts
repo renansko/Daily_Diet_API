@@ -41,54 +41,71 @@ export async function dietRoutes(app: FastifyInstance) {
     },
   )
   // Editar uma refeição
-  app.put('/:id', async (request, reply) => {
-    const updateDietShema = z.object({
-      id: z.string().uuid(),
-    })
-    const updateDietSchemaBody = z.object({
-      description: z.string(),
-      diaMesAno: z.string(),
-      hora: z.string(),
-      onDiet: z.boolean(),
-    })
-
-    const { description, diaMesAno, hora, onDiet } = updateDietSchemaBody.parse(
-      request.body,
-    )
-    const { id } = updateDietShema.parse(request.params)
-
-    const updatedDiet = await knex('diet')
-      .update({
-        description,
-        diaMesAno,
-        hora,
-        onDiet,
+  app.put(
+    '/:id',
+    {
+      preHandler: [checkUserAreadyExist],
+    },
+    async (request, reply) => {
+      const updateDietShema = z.object({
+        id: z.string().uuid(),
       })
-      .where('id', id)
-      .returning('*')
+      const updateDietSchemaBody = z.object({
+        description: z.string(),
+        diaMesAno: z.string(),
+        hora: z.string(),
+        onDiet: z.boolean(),
+      })
 
-    return { updatedDiet }
-  })
+      const { description, diaMesAno, hora, onDiet } =
+        updateDietSchemaBody.parse(request.body)
+      const { id } = updateDietShema.parse(request.params)
+
+      const updatedDiet = await knex('diet')
+        .update({
+          description,
+          diaMesAno,
+          hora,
+          onDiet,
+        })
+        .where('id', id)
+        .returning('*')
+
+      return { updatedDiet }
+    },
+  )
   // Deletar uma refeição
-  app.delete('/:id', async (request, reply) => {
-    const getdietsParamsSchema = z.object({
-      id: z.string(),
-    })
+  app.delete(
+    '/:id',
+    {
+      preHandler: [checkUserAreadyExist],
+    },
+    async (request, reply) => {
+      const getdietsParamsSchema = z.object({
+        id: z.string(),
+      })
 
-    const { id } = getdietsParamsSchema.parse(request.params)
+      const { id } = getdietsParamsSchema.parse(request.params)
 
-    const diets = await knex('diet').delete('*').where('id', id)
+      const diets = await knex('diet').delete('*').where('id', id)
 
-    return { diets }
-  })
+      return { diets }
+    },
+  )
   // Listar refeição de um usuario
-  app.get('/', async (request, reply) => {
-    const userId = request.cookies.userId
+  app.get(
+    '/',
+    {
+      preHandler: [checkUserAreadyExist],
+    },
+    async (request, reply) => {
+      const userId = request.cookies.userId
 
-    const diets = await knex('diet').select('*').where('userId', userId)
+      const diets = await knex('diet').select('*').where('userId', userId)
 
-    return { diets }
-  })
+      return { diets }
+    },
+  )
   // Listar apenas uma refeição
   app.get('/:id', async (request, reply) => {
     const getdietsParamsSchema = z.object({
