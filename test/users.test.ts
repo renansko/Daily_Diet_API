@@ -1,4 +1,4 @@
-import { beforeAll, afterAll, describe, it, expect, beforeEach } from 'vitest'
+import { beforeAll, afterAll, describe, it, beforeEach } from 'vitest'
 import { app } from '../src/app'
 import request from 'supertest'
 import { execSync } from 'node:child_process'

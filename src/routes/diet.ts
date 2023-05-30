@@ -61,7 +61,7 @@ export async function dietRoutes(app: FastifyInstance) {
         updateDietSchemaBody.parse(request.body)
       const { id } = updateDietShema.parse(request.params)
 
-      const updatedDiet = await knex('diet')
+      await knex('diet')
         .update({
           description,
           diaMesAno,
@@ -71,7 +71,7 @@ export async function dietRoutes(app: FastifyInstance) {
         .where('id', id)
         .returning('*')
 
-      return { updatedDiet }
+      return reply.status(204).send('Diet updated')
     },
   )
   // Deletar uma refeição
@@ -87,9 +87,9 @@ export async function dietRoutes(app: FastifyInstance) {
 
       const { id } = getdietsParamsSchema.parse(request.params)
 
-      const diets = await knex('diet').delete('*').where('id', id)
+      await knex('diet').delete('*').where('id', id)
 
-      return { diets }
+      return reply.status(204).send('Diet Deleted')
     },
   )
   // Listar refeição de um usuario
