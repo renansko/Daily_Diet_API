@@ -7,3 +7,6 @@ db/*.db
 # Everimental
 .env
 .env.test
+
+# Tests
+coverage
